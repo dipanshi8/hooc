@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import Navbar from './components/Navbar';
 
 const CARDS = [
   {
@@ -96,48 +97,37 @@ const fadeIn = (delay = 0) => ({
   show: { opacity: 1, transition: { duration: 0.8, ease: 'easeOut', delay } },
 });
 
-export default function LandingPage() {
+export default function LandingPage({ isLoaded = true, logoSlotRef }) {
   return (
     <div style={{ fontFamily: "'Inter', 'Outfit', sans-serif", WebkitFontSmoothing: 'antialiased', MozOsxFontSmoothing: 'grayscale' }}>
 
       {/* ── Hero + Navbar share the bg1 background ── */}
       <div style={{ backgroundImage: "url('/images/bg1.png')", backgroundSize: 'cover', backgroundPosition: 'top center', backgroundRepeat: 'no-repeat', width: '100%' }}>
 
-          {/* ── Navbar ── */}
-          <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1.25rem 5rem', width: '100%', boxSizing: 'border-box' }}>
-            <motion.div variants={fadeIn(0)} initial="hidden" animate="show" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <img src="/images/header.png" alt="Calmscious" style={{ height: '48px', objectFit: 'contain' }} />
-            </motion.div>
-            <motion.div variants={fadeIn(0.1)} initial="hidden" animate="show" style={{ display: 'flex', alignItems: 'center', gap: '2rem', fontSize: '0.95rem', fontWeight: 500, color: '#1A1A1A' }}>
-              <a href="#" style={{ color: '#0d9488', borderBottom: '2px solid #0d9488', paddingBottom: '2px' }}>Home</a>
-              <a href="#" style={{ color: '#1A1A1A', textDecoration: 'none' }}>About</a>
-              <a href="#" style={{ color: '#1A1A1A', textDecoration: 'none' }}>Contact</a>
-              <a href="#" style={{ color: '#1A1A1A', textDecoration: 'none' }}>Mental Health Test</a>
-              <a href="#" style={{ color: '#1A1A1A', textDecoration: 'none' }}>Blogs</a>
-            </motion.div>
-            <motion.button variants={fadeIn(0.2)} initial="hidden" animate="show"
-              style={{ background: '#2dd4bf', color: '#fff', fontWeight: 700, fontSize: '1rem', padding: '0.5rem 1.5rem', borderRadius: '0.75rem', border: 'none', cursor: 'pointer' }}>
-              Login
-            </motion.button>
-          </nav>
+          {/* ── Navbar — always visible, not gated by isLoaded ── */}
+          <Navbar isLoaded={isLoaded} ref={logoSlotRef} />
 
-          {/* ── Hero ── */}
-          <section style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '7rem 1.5rem 10rem', width: '100%', boxSizing: 'border-box' }}>
-            <motion.h1 variants={fadeUp(0.1)} initial="hidden" animate="show"
+          {/* ── Hero — fades in after logo lands ── */}
+          <motion.section
+            animate={{ opacity: isLoaded ? 1 : 0 }}
+            transition={{ duration: 0.7, ease: 'easeOut' }}
+            style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '7rem 1.5rem 10rem', width: '100%', boxSizing: 'border-box' }}
+          >
+            <motion.h1 variants={fadeUp(0.1)} initial="hidden" animate={isLoaded ? 'show' : 'hidden'}
               style={{ fontSize: 'clamp(3rem, 6vw, 5rem)', fontWeight: 800, letterSpacing: '-0.03em', color: '#0f1a1a', lineHeight: 1.1, marginBottom: '1.5rem', maxWidth: '900px' }}>
               Find Relief, Regain Balance,<br />and Feel in Control
             </motion.h1>
-            <motion.p variants={fadeUp(0.25)} initial="hidden" animate="show"
+            <motion.p variants={fadeUp(0.25)} initial="hidden" animate={isLoaded ? 'show' : 'hidden'}
               style={{ fontSize: '1.2rem', color: '#2d4a4a', marginTop: '0.5rem', marginBottom: '2.5rem' }}>
               Get the peace of mind you deserve—start today!
             </motion.p>
-            <motion.button variants={fadeUp(0.4)} initial="hidden" animate="show"
+            <motion.button variants={fadeUp(0.4)} initial="hidden" animate={isLoaded ? 'show' : 'hidden'}
               style={{ background: '#2dd4bf', color: '#fff', fontSize: '1.1rem', fontWeight: 600, padding: '1rem 3rem', borderRadius: '1rem', border: 'none', cursor: 'pointer', boxShadow: '0 8px 24px rgba(45,212,191,0.4)' }}
               whileHover={{ scale: 1.05, filter: 'brightness(1.08)' }}
               whileTap={{ scale: 0.97 }}>
               Book a session
             </motion.button>
-          </section>
+          </motion.section>
 
       </div>
 
