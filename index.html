@@ -4,8 +4,29 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>hooc</title>
+    <title>Calmscious</title>
+    <!-- Google Fonts: Inter + Noto Sans Devanagari + Nunito -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;700&family=Nunito:wght@600&display=swap" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'system-ui', 'sans-serif'],
+              nexa: ['Nexa', 'Inter', 'sans-serif'],
+              noto: ['"Noto Sans Devanagari"', 'Inter', 'sans-serif'],
+              nunito: ['Nunito', 'Inter', 'sans-serif'],
+            },
+            colors: {
+              brand: '#1ECAD3',
+            },
+          }
+        }
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

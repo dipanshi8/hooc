@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import Navbar from './components/Navbar';
 
 const CARDS = [
@@ -98,11 +98,146 @@ const fadeIn = (delay = 0) => ({
 });
 
 export default function LandingPage({ isLoaded = true, logoSlotRef }) {
+  const [isFrame473Open, setIsFrame473Open] = useState(false);
+
   return (
     <div style={{ fontFamily: "'Inter', 'Outfit', sans-serif", WebkitFontSmoothing: 'antialiased', MozOsxFontSmoothing: 'grayscale' }}>
 
-      {/* ── Hero + Navbar share the bg1 background ── */}
-      <div style={{ backgroundImage: "url('/images/bg1.png')", backgroundSize: 'cover', backgroundPosition: 'top center', backgroundRepeat: 'no-repeat', width: '100%' }}>
+      {/* ── Hero + Navbar — layered background system ── */}
+      <div style={{
+        position: 'relative',
+        width: '100%',
+        minHeight: '1024px',
+        overflowX: 'hidden',
+        display: 'flex',
+        flexDirection: 'column',
+        zIndex: 0,
+        isolation: 'isolate',
+      }}>
+
+        {/* Animated Hero background */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            left: '50%',
+            top: 0,
+            width: '1500px',
+            height: '1024px',
+            transform: 'translateX(-50%)',
+            zIndex: -1,
+            pointerEvents: 'none',
+            userSelect: 'none',
+            background: '#EAF8F9',
+            overflow: 'hidden',
+            WebkitMaskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)',
+            maskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)',
+          }}
+        >
+          <motion.img
+            src="/images/bg1.png"
+            alt=""
+            draggable={false}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              WebkitFilter: 'blur(15px) brightness(1.1)',
+              filter: 'blur(15px) brightness(1.1)',
+              transform: 'scale(1.1)',
+              opacity: 1,
+            }}
+            animate={{ opacity: [1, 0, 0, 1] }}
+            transition={{ duration: 12, times: [0, 0.33, 0.66, 1], ease: 'easeInOut', repeat: Infinity }}
+          />
+          <motion.img
+            src="/images/bg2.png"
+            alt=""
+            draggable={false}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              WebkitFilter: 'blur(15px) brightness(1.1)',
+              filter: 'blur(15px) brightness(1.1)',
+              transform: 'scale(1.1)',
+              opacity: 1,
+            }}
+            animate={{ opacity: [0, 1, 0, 0] }}
+            transition={{ duration: 12, times: [0, 0.33, 0.66, 1], ease: 'easeInOut', repeat: Infinity }}
+          />
+          <motion.img
+            src="/images/bg3.png"
+            alt=""
+            draggable={false}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              WebkitFilter: 'blur(15px) brightness(1.1)',
+              filter: 'blur(15px) brightness(1.1)',
+              transform: 'scale(1.1)',
+              opacity: 1,
+            }}
+            animate={{ opacity: [0, 0, 1, 0] }}
+            transition={{ duration: 12, times: [0, 0.33, 0.66, 1], ease: 'easeInOut', repeat: Infinity }}
+          />
+        </div>
+
+        {/* Pillar texture overlay (extends behind Navbar + Hero text) */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 1,
+            pointerEvents: 'none',
+            opacity: 0.7,
+            mixBlendMode: 'overlay',
+            background:
+              // 3D pillar rib: left shadow → white highlight → clear body (100px cadence)
+              'repeating-linear-gradient(90deg,' +
+              'rgba(0, 100, 120, 0.4) 0px,' +
+              'rgba(0, 70, 90, 0.5) 4px,' +
+              '#FFFFFF 5px,' +
+              '#FFFFFF 10px,' +
+              'rgba(255,255,255,0) 15px,' +
+              'rgba(255,255,255,0) 100px)',
+            boxShadow: 'inset 10px 0 15px -10px rgba(0,0,0,0.2)',
+            WebkitMaskImage: 'linear-gradient(to bottom, black 60%, transparent 95%)',
+            maskImage: 'linear-gradient(to bottom, black 60%, transparent 95%)',
+          }}
+        />
+
+        {/* Hero → next section bridge (Rectangle 16) */}
+        <div
+          aria-hidden="true"
+          className="hero-bottom-blur"
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            height: '105px',
+            bottom: '-52px',
+            background: '#7FDDE2',
+            zIndex: 5,
+            pointerEvents: 'none',
+            backdropFilter: 'blur(53px)',
+            WebkitBackdropFilter: 'blur(53px)',
+            // fallback if backdrop-filter is unsupported/weak:
+            filter: 'blur(53px)',
+            WebkitFilter: 'blur(53px)',
+          }}
+        />
+
+        {/* Layer 4 — UI content, always on top */}
+        <div style={{ position: 'relative', zIndex: 20, display: 'flex', flexDirection: 'column', flex: 1 }}>
 
           {/* ── Navbar — always visible, not gated by isLoaded ── */}
           <Navbar isLoaded={isLoaded} ref={logoSlotRef} />
@@ -111,25 +246,214 @@ export default function LandingPage({ isLoaded = true, logoSlotRef }) {
           <motion.section
             animate={{ opacity: isLoaded ? 1 : 0 }}
             transition={{ duration: 0.7, ease: 'easeOut' }}
-            style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '7rem 1.5rem 10rem', width: '100%', boxSizing: 'border-box' }}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              textAlign: 'center',
+              /*
+                Figma: h1 top = 296px from frame top, navbar = 135px
+                h1 is absolutely positioned at top=296px (relative to Layer 4 container),
+                so section padding-top starts content beneath the heading box.
+                Book a Session button top = 638px
+                → section padding-bottom covers remaining space
+              */
+              paddingTop: '355px',
+              paddingBottom: '9rem',
+              paddingLeft: '1.5rem',
+              paddingRight: '1.5rem',
+              width: '100%',
+              boxSizing: 'border-box',
+            }}
           >
-            <motion.h1 variants={fadeUp(0.1)} initial="hidden" animate={isLoaded ? 'show' : 'hidden'}
-              style={{ fontSize: 'clamp(3rem, 6vw, 5rem)', fontWeight: 800, letterSpacing: '-0.03em', color: '#0f1a1a', lineHeight: 1.1, marginBottom: '1.5rem', maxWidth: '900px' }}>
+            <AnimatePresence>
+              {isFrame473Open ? (
+                <motion.div
+                  key="frame-473-overlay"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.8, ease: 'easeOut' }}
+                  style={{
+                    position: 'fixed',
+                    inset: 0,
+                    zIndex: 80,
+                    background: 'rgba(255,255,255,0.95)',
+                  }}
+                >
+                  <button
+                    type="button"
+                    aria-label="Close Frame 473 overlay"
+                    onClick={() => setIsFrame473Open(false)}
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      background: 'transparent',
+                      border: 'none',
+                      padding: 0,
+                      cursor: 'default',
+                    }}
+                  />
+                  <div
+                    style={{
+                      position: 'relative',
+                      height: '100%',
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      padding: '24px',
+                      boxSizing: 'border-box',
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: 'min(720px, 100%)',
+                        borderRadius: '18px',
+                        border: '1px solid rgba(0,0,0,0.1)',
+                        background: '#fff',
+                        padding: '24px',
+                        boxShadow: '0 24px 80px rgba(0,0,0,0.12)',
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px' }}>
+                        <div style={{ minWidth: 0 }}>
+                          <div style={{ fontFamily: "'Nunito', 'Inter', sans-serif", fontWeight: 600, fontSize: '28px', color: '#1F2A3A' }}>
+                            Frame 473
+                          </div>
+                          <div style={{ marginTop: '6px', fontSize: '14px', color: '#53606f' }}>
+                            Replace this overlay with your booking flow.
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setIsFrame473Open(false)}
+                          style={{
+                            border: 'none',
+                            background: '#f1f5f9',
+                            color: '#1F2A3A',
+                            padding: '10px 12px',
+                            borderRadius: '12px',
+                            cursor: 'pointer',
+                            fontWeight: 600,
+                          }}
+                        >
+                          Close
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ) : null}
+            </AnimatePresence>
+
+            {/* H1 — Figma: Nexa Heavy 900, 64px, line-height 100%, color #2B2D42
+                Box: 890×194px | top: 296px from frame (296-135 navbar = 161px from section top)
+                letter-spacing: 0px, text-align: center, opacity: 1 */}
+            <motion.h1
+              variants={fadeUp(0.1)}
+              initial="hidden"
+              animate={isLoaded ? 'show' : 'hidden'}
+              style={{
+                position: 'absolute',
+                top: '296px',
+                left: '275px',
+                fontFamily: "'Nexa', 'Inter', sans-serif",
+                fontSize: '64px',
+                fontWeight: 900,
+                lineHeight: 1,
+                letterSpacing: '0px',
+                color: '#1F2A3A',
+                textAlign: 'center',
+                width: '890px',
+                height: '194px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column',
+                marginBottom: '1.5rem',
+                /* contrast guard — light bg needs no shadow, color #2B2D42 is dark enough */
+                textShadow: 'none',
+              }}
+            >
               Find Relief, Regain Balance,<br />and Feel in Control
             </motion.h1>
-            <motion.p variants={fadeUp(0.25)} initial="hidden" animate={isLoaded ? 'show' : 'hidden'}
-              style={{ fontSize: '1.2rem', color: '#2d4a4a', marginTop: '0.5rem', marginBottom: '2.5rem' }}>
+
+            {/* Subtext — Figma: Noto Sans Devanagari 400, 32px, line-height 100%, color #000 */}
+            <motion.p
+              variants={fadeUp(0.2)}
+              initial="hidden"
+              animate={isLoaded ? 'show' : 'hidden'}
+              style={{
+                fontFamily: "'Noto Sans Devanagari', 'Inter', sans-serif",
+                fontSize: '32px',
+                fontWeight: 400,
+                lineHeight: 1,
+                color: '#1a1a1a',
+                marginBottom: '3rem',
+              }}
+            >
               Get the peace of mind you deserve—start today!
             </motion.p>
-            <motion.button variants={fadeUp(0.4)} initial="hidden" animate={isLoaded ? 'show' : 'hidden'}
-              style={{ background: '#2dd4bf', color: '#fff', fontSize: '1.1rem', fontWeight: 600, padding: '1rem 3rem', borderRadius: '1rem', border: 'none', cursor: 'pointer', boxShadow: '0 8px 24px rgba(45,212,191,0.4)' }}
-              whileHover={{ scale: 1.05, filter: 'brightness(1.08)' }}
-              whileTap={{ scale: 0.97 }}>
-              Book a session
+
+            {/* Book a Session — Figma: 253×68px, bg #1ECAD3, radius 16px, padding 12px 18px */}
+            <motion.button
+              variants={fadeUp(0.3)}
+              initial="hidden"
+              animate={isLoaded ? 'show' : 'hidden'}
+              whileHover={{ scale: 1.04, filter: 'brightness(1.08)' }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => setIsFrame473Open(true)}
+              style={{
+                position: 'absolute',
+                top: '638px',
+                left: '575px',
+                width: '253px',
+                height: '68px',
+                background: '#1ECAD3',
+                color: '#fff',
+                borderRadius: '16px',
+                padding: '12px 18px',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: '10px',
+                fontFamily: "'Nunito', 'Inter', sans-serif",
+                fontWeight: 600,
+                fontSize: '32px',
+                lineHeight: 1,
+                textAlign: 'center',
+                border: 'none',
+                cursor: 'pointer',
+                boxShadow: '0 8px 28px rgba(30,202,211,0.4)',
+                letterSpacing: '0.01em',
+                /* dissolve to Frame 473 on click: ease-out 800ms */
+                transition: 'opacity 800ms ease-out',
+              }}
+            >
+              <span
+                style={{
+                  width: '217px',
+                  height: '44px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  whiteSpace: 'nowrap',
+                  fontFamily: "'Nunito', 'Inter', sans-serif",
+                  fontWeight: 600,
+                  fontSize: '32px',
+                  lineHeight: 1,
+                  color: '#FFFFFF',
+                  textAlign: 'center',
+                }}
+              >
+                Book a Session
+              </span>
             </motion.button>
           </motion.section>
 
-      </div>
+        </div>{/* /Layer 4 UI content */}
+      </div>{/* /Hero+Navbar layered bg */}
 
       <div style={{ width: '100%' }}>
 
@@ -140,6 +464,8 @@ export default function LandingPage({ isLoaded = true, logoSlotRef }) {
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
           width: '100%',
+          backgroundColor: '#7FDDE2',
+          marginTop: 0,
           padding: '4rem 6rem',
           boxSizing: 'border-box',
         }}>

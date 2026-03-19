@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, animate } from 'framer-motion';
 import LandingPage from './LandingPage';
 
-const IMG_H = 44;
+const IMG_H = 81; // matches navbar slot height (Figma: 81px)
 
 export default function App() {
   const [phase, setPhase] = useState('reveal'); // reveal | glide | done
@@ -75,10 +75,11 @@ export default function App() {
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           style={{
             position: 'fixed',
-            top: '50%', left: '5%',
-            translateY: '-50%',
+            top: '50%',
+            left: '5%',
+            transform: 'translateY(-50%)',
+            width: '257px',   /* must match slot width exactly */
             height: `${IMG_H}px`,
-            width: 'auto',
             objectFit: 'contain',
             zIndex: 102,
             pointerEvents: 'none',
