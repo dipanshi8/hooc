@@ -101,19 +101,34 @@ export default function LandingPage({ isLoaded = true, logoSlotRef }) {
   const [isFrame473Open, setIsFrame473Open] = useState(false);
 
   return (
-    <div style={{ fontFamily: "'Inter', 'Outfit', sans-serif", WebkitFontSmoothing: 'antialiased', MozOsxFontSmoothing: 'grayscale' }}>
+    <div
+      style={{
+        fontFamily: "'Inter', 'Outfit', sans-serif",
+        WebkitFontSmoothing: 'antialiased',
+        MozOsxFontSmoothing: 'grayscale',
+        width: '1440px',
+        minHeight: '7215px',
+        margin: '0 auto',
+        background: '#FFFFFF',
+        overflowY: 'auto',
+      }}
+    >
 
       {/* ── Hero + Navbar — layered background system ── */}
-      <div style={{
-        position: 'relative',
-        width: '100%',
-        minHeight: '1024px',
-        overflowX: 'hidden',
-        display: 'flex',
-        flexDirection: 'column',
-        zIndex: 0,
-        isolation: 'isolate',
-      }}>
+      <div
+        style={{
+          position: 'relative',
+          width: '100%',
+          height: '1024px',
+          background: '#EAF8F9',
+          overflowX: 'hidden',
+          overflowY: 'visible',
+          display: 'flex',
+          flexDirection: 'column',
+          zIndex: 0,
+          isolation: 'isolate',
+        }}
+      >
 
         {/* Animated Hero background */}
         <div
@@ -210,8 +225,8 @@ export default function LandingPage({ isLoaded = true, logoSlotRef }) {
               'rgba(255,255,255,0) 15px,' +
               'rgba(255,255,255,0) 100px)',
             boxShadow: 'inset 10px 0 15px -10px rgba(0,0,0,0.2)',
-            WebkitMaskImage: 'linear-gradient(to bottom, black 60%, transparent 95%)',
-            maskImage: 'linear-gradient(to bottom, black 60%, transparent 95%)',
+            WebkitMaskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)',
+            maskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)',
           }}
         />
 
@@ -225,7 +240,11 @@ export default function LandingPage({ isLoaded = true, logoSlotRef }) {
             right: 0,
             height: '105px',
             bottom: '-52px',
-            background: '#7FDDE2',
+            backgroundColor: '#7FDDE2',
+            backgroundImage: "url('/images/Rectangle 16.png')",
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center',
+            backgroundSize: 'cover',
             zIndex: 5,
             pointerEvents: 'none',
             backdropFilter: 'blur(53px)',
